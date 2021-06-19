@@ -1,0 +1,252 @@
+<html>
+  <head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.14/p5.js"></script>
+  </head>
+  <body>
+  <SCRIPT LANGUAGE="JavaScript">
+  
+  var characterHeadY = 510
+  var characterBodyY = 530
+  var characterLegY = 570
+  var obBack = 1000
+  var obCabinet = 1010
+  var obDesk1 = 1160
+  var obDesk2 = 1070
+  var obDesk3 = 1070
+  var obChair1 = 1100
+  var obChair2 = 1100
+  var obChairLeg1a = 1100
+  var obChairLeg1b = 1115
+  var obChairLeg2a = 1115
+  var obChairLeg2b = 1115
+  var obChairLeg3a = 1130
+  var obChairLeg3b = 1115
+  var gameStart = 0
+  var jumps = 1
+  var score = 0
+  var gameEnd = 0
+  var obSpeed = 20
+  
+	function setup(){ 
+		
+		createCanvas(1350,645);
+		
+		backdrop()
+		obstacles()
+		character()
+		
+		
+	}
+	function draw(){
+
+		if(characterHeadY == 510){
+		
+			jumps = 1
+		
+		}
+		
+		else if(characterHeadY <= 250){
+		
+			jumps = 0
+		
+		}
+	
+		if(keyIsDown(UP_ARROW) && characterHeadY >= 250 && jumps == 1 && gameEnd == 0){
+		
+			characterHeadY -= 30
+			characterBodyY -= 30
+			characterLegY -= 30
+			
+		}
+		
+		if(characterHeadY <= 250 || characterHeadY < 510){
+		
+			characterHeadY += 10
+			characterBodyY += 10
+			characterLegY += 10
+		
+		}
+		
+		else if(characterHeadY > 510){
+		
+			characterHeadY = 510
+			characterBodyY = 530
+			characterLegY = 570
+		
+		}	
+
+		gameMechanics()
+		backdrop()
+		obstacles()
+		character()
+		obMovement()
+		display()
+		
+	}
+ 
+	function backdrop(){
+	
+		noStroke()
+			fill(181, 179, 159)
+				rect(0,0,1350,645)
+			fill(76, 76, 71)
+				rect(0,600,1350,45)
+	
+		stroke(0)
+		strokeWeight(2)
+			fill(255)
+				ellipse(900,90,50,50)
+				line(900,90,900,110)
+				line(900,90,910,100)
+				
+	}
+	
+	function character(){
+	
+		noStroke()
+			fill(245, 249, 127)
+				ellipse(200,characterHeadY,30,30)
+			fill(94, 142, 219)
+				rect(185,characterBodyY,30,40)
+			fill(229, 169, 66)
+				rect(185,characterLegY,30,30)
+		stroke(0)
+		strokeWeight(2)
+			line(200,characterHeadY,215,characterHeadY)
+			line(215,characterHeadY - 5,215,characterHeadY + 5)
+	}
+	
+	function obstacles(){
+	
+		noStroke()
+			fill(218,226,167)
+				rect(obBack,475,200,125)
+			fill(253, 255, 244)
+				rect(obDesk1,550,40,50)
+				rect(obDesk2,550,90,15)
+				rect(obDesk3,550,15,50)
+			fill(67, 70, 76)
+				rect(obChair1,535,10,40)
+				rect(obChair2,575,30,10)
+			fill(214, 153, 62)
+				rect(obCabinet,500,50,100)
+		stroke(0)
+		strokeWeight(3)
+				line(obChairLeg1a,600,obChairLeg1b,585)
+				line(obChairLeg2a,600,obChairLeg2b,585)
+				line(obChairLeg3a,600,obChairLeg3b,585)
+	
+	}
+  
+	function obMovement(){
+	
+		if(obBack + 200 >= 0 && gameStart == 1 && gameEnd == 0){
+		
+			obBack -= obSpeed
+			obCabinet -= obSpeed
+			obChair1 -= obSpeed
+			obChair2 -= obSpeed
+			obChairLeg1a -= obSpeed
+			obChairLeg1b -= obSpeed
+			obChairLeg2a -= obSpeed
+			obChairLeg2b -= obSpeed
+			obChairLeg3a -= obSpeed
+			obChairLeg3b -= obSpeed
+			obDesk1 -= obSpeed
+			obDesk2 -= obSpeed
+			obDesk3 -= obSpeed
+		
+		}
+	
+		if(obBack + 200 <= 0){
+	
+			obBack = 1350
+			obCabinet = 1360
+			obChair1 = 1450
+			obChair2  = 1450
+			obChairLeg1a = 1450
+			obChairLeg1b = 1465
+			obChairLeg2a = 1465
+			obChairLeg2b = 1465
+			obChairLeg3a = 1480
+			obChairLeg3b = 1465
+			obDesk1 = 1510
+			obDesk2 = 1420
+			obDesk3 = 1420
+			score += 1
+			
+				if(score % 5 == 0){
+		
+					obSpeed += 5
+		
+				}
+				
+		}
+	
+	}
+  
+	function gameMechanics(){
+  
+		if(characterLegY + 30 <= 600 && characterLegY + 30 >= 475){
+		
+			if(obBack <= 215 && obBack >= 185){
+			
+				gameEnd = 1
+			
+			}
+		
+		}
+  
+		if(obBack + 200 <= 415 && obBack + 200 >= 185){
+		
+			if(characterLegY + 30 >= 475){
+			
+				gameEnd = 1
+				
+			}
+			
+		}
+  
+	}
+  
+	function display(){
+	
+		textSize(50)
+			fill(0)
+				text(score,670,50)
+	
+			if(gameStart == 0){
+			
+				textSize(50)
+					fill(0)
+						text("Press 'Enter' to Begin",425,200)
+			
+			}
+			
+			if(gameEnd == 1){
+		
+				textSize(50)
+					fill(0)
+						text("You Have Died Press 'F5' To Try Again",250,200)
+		
+			}
+		
+	}
+  
+	function keyPressed(){
+
+		if(keyCode == ENTER){
+		
+			gameStart = 1
+		
+		}
+		
+	
+	}
+  
+  </SCRIPT>
+  </body>
+</html>
+
+
+
